@@ -1,23 +1,18 @@
-import Hero from './components/Hero';
-import BookingCTA from './components/BookingCTA';
-import Footer from './components/Footer';
-import FloatingButtons from './components/FloatingButtons';
+import Hero from "./components/Hero";
+import BookingCTA from "./components/BookingCTA";
+import Footer from "./components/Footer";
+import FloatingButtons from "./components/FloatingButtons";
+import WhyChooseUs from "./components/WhyChooseUs";
+
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white dark:bg-black">
-      
       <Hero />
-       <BookingCTA />
-
-      {/* Floating Buttons (fixed, does NOT affect layout) */}
+      <BookingCTA />
+      <WhyChooseUs />
       <FloatingButtons />
-
-      {/* Footer directly below content */}
       <Footer />
-
-
-      
     </main>
   );
 }
