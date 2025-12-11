@@ -19,7 +19,7 @@ const BookingCTA = () => {
     <section className="bg-[#1B1B2F] py-14 px-6 sm:px-10 text-center text-white relative overflow-hidden -mt-6 sm:-mt-10">
 
       {/* Orange Gradient Line */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF6A00] via-[#E85B00] to-[#FF6A00]"></div>
+      <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-[#FF6A00] via-[#E85B00] to-[#FF6A00]"></div>
 
       {/* CONTENT */}
       <div data-aos="fade-up" className="max-w-3xl mx-auto">
