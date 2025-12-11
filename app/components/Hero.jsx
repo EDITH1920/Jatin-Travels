@@ -18,7 +18,6 @@ const bgStyle = {
 };
 
 const Hero = () => {
-  // AOS runs only on client (SAFE for hydration)
   useEffect(() => {
     AOS.init({
       duration: 900,
@@ -33,7 +32,10 @@ const Hero = () => {
     <div style={bgStyle} className="overflow-hidden">
       {/* Dark transparent overlay */}
       <div className="bg-[#1B1B2F]/65 backdrop-blur-sm text-white h-full w-full">
-        <div className="container mx-auto flex flex-col items-center text-center pt-10 pb-2 sm:pt-16">
+
+        {/* UPDATED PADDING HERE → pt-28 sm:pt-36 */}
+        <div className="container mx-auto flex flex-col items-center text-center pt-28 sm:pt-36 pb-2">
+
           {/* Badge */}
           <div
             data-aos="fade-down"
@@ -79,12 +81,6 @@ const Hero = () => {
             data-aos-delay="800"
             className="mt-6 sm:mt-8 -mb-10 sm:-mb-14 drop-shadow-[0_20px_30px_rgba(0,0,0,0.55)]"
           >
-            {/* <Image
-              src={yellowCab}
-              alt="yellow cab"
-              className="max-h-[330px] sm:max-h-[480px] mx-auto float-car"
-              priority  // Prevents loading shift (SAFE)
-            /> */}
             <div data-aos="zoom-in-up" data-aos-delay="500" className="mt-10">
               <Image
                 src={yellowCab}
