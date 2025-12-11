@@ -31,12 +31,9 @@ const Hero = () => {
 
   return (
     <div style={bgStyle} className="overflow-hidden">
-
       {/* Dark transparent overlay */}
       <div className="bg-[#1B1B2F]/65 backdrop-blur-sm text-white h-full w-full">
-
         <div className="container mx-auto flex flex-col items-center text-center pt-10 pb-2 sm:pt-16">
-
           {/* Badge */}
           <div
             data-aos="fade-down"
@@ -46,15 +43,14 @@ const Hero = () => {
           </div>
 
           {/* Heading */}
-         <h1
-          data-aos="fade-up"
-          data-aos-delay="200"
-          className="mt-6 text-3xl sm:text-6xl font-bold leading-tight text-[#FF6A00]"
-          style={{ textShadow: "0px 4px 18px rgba(0,0,0,0.65)" }}
+          <h1
+            data-aos="fade-up"
+            data-aos-delay="200"
+            className="mt-6 text-3xl sm:text-6xl font-bold leading-tight text-[#FF6A00]"
+            style={{ textShadow: "0px 4px 18px rgba(0,0,0,0.65)" }}
           >
             Jatin Travels
-            </h1>
-
+          </h1>
 
           {/* Subtitle */}
           <p
@@ -62,19 +58,20 @@ const Hero = () => {
             data-aos-delay="400"
             className="text-base sm:text-xl text-[#F8F8F8]/90 mt-4 max-w-xl"
           >
-            Book your ride anytime, anywhere with Jatin Travels — trusted across Chhattisgarh.
+            Book your ride anytime, anywhere with Jatin Travels — trusted across
+            Chhattisgarh.
           </p>
 
           {/* Call Button */}
           <a
-          href="tel:+919179053619"
-          data-aos="zoom-in"
-          data-aos-delay="600"
-          className="mt-6 inline-flex items-center gap-3 bg-[#FF6A00] hover:bg-[#E85B00] transition-all duration-300 shadow-2xl px-6 py-3 rounded-full text-lg font-semibold text-white"
+            href="tel:+919179053619"
+            data-aos="zoom-in"
+            data-aos-delay="600"
+            className="mt-6 inline-flex items-center gap-3 bg-[#FF6A00] hover:bg-[#E85B00] transition-all duration-300 shadow-2xl px-6 py-3 rounded-full text-lg font-semibold text-white"
           >
             <FaPhoneAlt size={20} />
-             91790-53619
-             </a>
+            91790-53619
+          </a>
 
           {/* Car Image */}
           <div
@@ -82,14 +79,21 @@ const Hero = () => {
             data-aos-delay="800"
             className="mt-6 sm:mt-8 -mb-10 sm:-mb-14 drop-shadow-[0_20px_30px_rgba(0,0,0,0.55)]"
           >
-            <Image
+            {/* <Image
               src={yellowCab}
               alt="yellow cab"
               className="max-h-[330px] sm:max-h-[480px] mx-auto float-car"
               priority  // Prevents loading shift (SAFE)
-            />
+            /> */}
+            <div data-aos="zoom-in-up" data-aos-delay="500" className="mt-10">
+              <Image
+                src={yellowCab}
+                alt="Cab Car"
+                className="max-h-[220px] sm:max-h-[340px] md:max-h-[420px] lg:max-h-[480px] mx-auto object-contain float-car"
+                priority
+              />
+            </div>
           </div>
-
         </div>
       </div>
     </div>
