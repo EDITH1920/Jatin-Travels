@@ -3,6 +3,9 @@ import BookingCTA from "./components/BookingCTA";
 import Footer from "./components/Footer";
 import FloatingButtons from "./components/FloatingButtons";
 import WhyChooseUs from "./components/WhyChooseUs";
+import Testimonials from "./components/Testimonials";
+import Reviews from "./components/Reviews";
+import CustomerReviews from "./components/CustomerReviews";
 
 
 export default function Home() {
@@ -11,6 +14,9 @@ export default function Home() {
       <Hero />
       <BookingCTA />
       <WhyChooseUs />
+      {/* <CustomerReviews /> */}
+      {/* <Testimonials /> */}
+      <Reviews />
       <FloatingButtons />
       <Footer />
       

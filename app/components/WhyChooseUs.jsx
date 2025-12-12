@@ -1,72 +1,94 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { FaShieldAlt, FaRupeeSign, FaUserTie } from "react-icons/fa";
+import { FaCarSide, FaShieldAlt, FaClock } from "react-icons/fa";
+import { GiReceiveMoney } from "react-icons/gi";
 import AOS from "aos";
-import "aos/dist/aos.css";
+import { useEffect } from "react";
 
 const WhyChooseUs = () => {
   useEffect(() => {
     AOS.init({
       duration: 900,
-      easing: "ease-in-out",
+      once: false,
+      mirror: true,
+      easing: "ease-out-cubic",
     });
   }, []);
 
+  const features = [
+    {
+      icon: <FaShieldAlt size={40} />,
+      title: "Safe & Reliable Rides",
+      desc: "Your safety is our priority — experienced drivers & well-maintained cabs.",
+    },
+    {
+      icon: <FaCarSide size={40} />,
+      title: "Fast Pickup",
+      desc: "Get picked up quickly with our responsive and fast cab service.",
+    },
+    {
+      icon: <GiReceiveMoney size={40} />,
+      title: "Affordable Pricing",
+      desc: "Premium rides at the most affordable pricing across Chhattisgarh.",
+    },
+    {
+      icon: <FaClock size={40} />,
+      title: "24×7 Service",
+      desc: "Book anytime — day or night. We’re available for all travel needs.",
+    },
+  ];
+
   return (
-    <section className="bg-white dark:bg-black py-14 px-6 sm:px-10">
+    <section className="bg-[#0C0C18] py-12 sm:py-14 px-6 text-white">
       <div className="max-w-6xl mx-auto text-center">
-        
-        {/* Heading */}
-        <h2 
-          data-aos="fade-up" 
-          className="text-3xl sm:text-4xl font-bold text-[#FF6A00] mb-10"
+
+        {/* Title */}
+        <h2
+          data-aos="fade-up"
+          className="text-3xl sm:text-4xl font-bold text-[#FF6A00]"
         >
           Why Choose Us?
         </h2>
 
-        {/* 3 Features */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+        {/* Divider */}
+        <div
+          data-aos="fade-up"
+          data-aos-delay="150"
+          className="w-24 h-[3px] bg-[#FF6A00] mx-auto mt-3 rounded-full opacity-80"
+        ></div>
 
-          {/* Safe & Reliable */}
-          <div 
-            data-aos="fade-up" 
-            data-aos-delay="100"
-            className="bg-[#1B1B2F] text-white p-8 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
-          >
-            <FaShieldAlt className="text-[#FF6A00] text-4xl mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Safe & Reliable</h3>
-            <p className="text-gray-300 text-sm">
-              Verified drivers and clean, well-maintained cabs for every ride.
-            </p>
-          </div>
+        {/* Subtitle */}
+        <p
+          data-aos="fade-up"
+          data-aos-delay="250"
+          className="text-gray-300 mt-4 text-base max-w-2xl mx-auto"
+        >
+          Your trusted cab partner across Chhattisgarh — delivering the best travel experience.
+        </p>
 
-          {/* Affordable Pricing */}
-          <div 
-            data-aos="fade-up" 
-            data-aos-delay="200"
-            className="bg-[#1B1B2F] text-white p-8 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
-          >
-            <FaRupeeSign className="text-[#FF6A00] text-4xl mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Affordable Pricing</h3>
-            <p className="text-gray-300 text-sm">
-              Best price guaranteed with transparent fare — no hidden charges.
-            </p>
-          </div>
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+          {features.map((item, index) => (
+            <div
+              key={index}
+              data-aos="zoom-in"
+              data-aos-delay={200 + index * 150}
+              className="p-6 rounded-xl bg-[#1B1B2F]/50 backdrop-blur-md shadow-lg border border-white/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_8px_28px_rgba(255,106,0,0.35)]"
+            >
+              {/* Icon */}
+              <div className="text-[#FF6A00] mb-4 drop-shadow-[0_0_6px_rgba(255,106,0,0.6)] flex justify-center">
+                {item.icon}
+              </div>
 
-          {/* Professional Drivers */}
-          <div 
-            data-aos="fade-up" 
-            data-aos-delay="300"
-            className="bg-[#1B1B2F] text-white p-8 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
-          >
-            <FaUserTie className="text-[#FF6A00] text-4xl mx-auto mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Professional Drivers</h3>
-            <p className="text-gray-300 text-sm">
-              Experienced, polite, and trained drivers for a smooth journey.
-            </p>
-          </div>
+              {/* Title */}
+              <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
 
+              {/* Description */}
+              <p className="text-gray-300 text-sm max-w-[260px] mx-auto leading-relaxed">
+                {item.desc}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

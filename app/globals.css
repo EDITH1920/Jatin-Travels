@@ -43,3 +43,47 @@ body {
 
 
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* -------------------------------
+   NAVBAR HOVER EFFECTS
+-------------------------------- */
+
+/* Wrapper for nav items */
+.nav-hover {
+  position: relative;
+  display: inline-block;
+  padding: 4px 0;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+/* Underline animation */
+.nav-hover::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color: #FF6A00;
+  transform: translateX(-50%);
+  transition: width 0.28s ease;
+}
+
+.nav-hover:hover::after {
+  width: 100%;
+}
+
+/* Text glow */
+.nav-hover:hover {
+  color: #FF6A00 !important;
+  text-shadow: 0px 0px 10px rgba(255, 106, 0, 0.7);
+}
+
+/* Magnetic hover effect (subtle) */
+.nav-hover:hover {
+  transform: translateY(-2px);
+  cursor: pointer;
+}
