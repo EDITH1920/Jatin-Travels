@@ -7,7 +7,7 @@ import { FiMenu, FiX } from "react-icons/fi";
 
 // Sections for navbar
 const sections = [
-  { id: "book", label: "Book a Ride" },
+  { id: "modal", label: "Book a Ride" }, // OPEN MODAL
   { id: "services", label: "Services" },
   { id: "pricing", label: "Pricing" },
   { id: "reviews", label: "Reviews" },
@@ -15,7 +15,7 @@ const sections = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("book");
+  const [activeSection, setActiveSection] = useState("services");
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
 
@@ -49,9 +49,18 @@ export default function Navbar() {
   };
 
   /* --------------------------------------
-        SCROLL TO SECTION WITH OFFSET
+        SCROLL TO SECTION (OPEN MODAL TOO)
   ---------------------------------------- */
   const scrollToSection = (id) => {
+    // ⭐ NEW → Open Booking Modal
+    if (id === "modal") {
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("openBookingModal"));
+      }
+      setMenuOpen(false);
+      return;
+    }
+
     const el = document.getElementById(id);
     if (!el) return;
 
@@ -74,6 +83,8 @@ export default function Navbar() {
       lastScrollY.current = currentY;
 
       sections.forEach((section) => {
+        if (section.id === "modal") return; // modal has no scroll section
+
         const el = document.getElementById(section.id);
         if (!el) return;
 
@@ -109,11 +120,7 @@ export default function Navbar() {
           fixed top-0 left-0 w-full z-50 px-6 py-4 flex items-center justify-between
           transition-all duration-500
           ${hidden ? "-translate-y-full" : "translate-y-0"}
-          ${
-            scrolled
-              ? "bg-black/70 backdrop-blur-xl shadow-xl"
-              : "bg-black/30 backdrop-blur-md"
-          }
+          ${scrolled ? "bg-black/70 backdrop-blur-xl shadow-xl" : "bg-black/30 backdrop-blur-md"}
         `}
       >
         {/* LOGO */}
@@ -142,9 +149,7 @@ export default function Navbar() {
               ref={(el) => (navLinkRefs.current[s.id] = el)}
               onClick={() => scrollToSection(s.id)}
               className={`nav-hover ${
-                activeSection === s.id
-                  ? "text-[#FF6A00]"
-                  : "text-white"
+                activeSection === s.id ? "text-[#FF6A00]" : "text-white"
               }`}
             >
               {s.label}
@@ -161,7 +166,7 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* MOBILE MENU OVERLAY */}
+      {/* MOBILE MENU */}
       <div
         className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-all duration-300 ${
           menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
