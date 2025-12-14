@@ -2,200 +2,269 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import logo from "../assets/logo.png";
 import { FiMenu, FiX } from "react-icons/fi";
 
-// Sections for navbar
-const sections = [
-  { id: "modal", label: "Book a Ride" }, // OPEN MODAL
-  { id: "services", label: "Services" },
-  { id: "pricing", label: "Pricing" },
-  { id: "reviews", label: "Reviews" },
+/* ---------------- NAV CONFIG ---------------- */
+const navItems = [
+  { id: "home", label: "Home", type: "home" },
+  { id: "modal", label: "Book a Ride", type: "modal" },
+  { id: "services", label: "Services", type: "scroll" },
+  { id: "pricing", label: "Pricing", type: "scroll" },
+  { id: "reviews", label: "Reviews", type: "scroll" },
+  { id: "/about", label: "About", type: "route" },
+  { id: "/contact", label: "Contact", type: "route" },
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
+
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("services");
+  const [activeSection, setActiveSection] = useState("home");
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
 
   const lastScrollY = useRef(0);
   const highlightRef = useRef(null);
-  const navLinkRefs = useRef([]);
+  const navLinkRefs = useRef({});
 
-  /* --------------------------------------
-        PREMIUM SMOOTH SCROLL EASING
-  ---------------------------------------- */
-  const smoothScrollTo = (targetY, duration = 700) => {
+  /* ---------------- SMOOTH SCROLL ---------------- */
+  const smoothScrollTo = (y, duration = 700) => {
     const startY = window.scrollY;
-    const diff = targetY - startY;
+    const diff = y - startY;
     let start;
-
-    const easeInOutCubic = (t) =>
+    const ease = (t) =>
       t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-    const step = (timestamp) => {
-      if (!start) start = timestamp;
-      const time = timestamp - start;
-      const progress = Math.min(time / duration, 1);
-      const ease = easeInOutCubic(progress);
-
-      window.scrollTo(0, startY + diff * ease);
-
-      if (progress < 1) requestAnimationFrame(step);
+    const step = (ts) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / duration, 1);
+      window.scrollTo(0, startY + diff * ease(p));
+      if (p < 1) requestAnimationFrame(step);
     };
 
     requestAnimationFrame(step);
   };
 
-  /* --------------------------------------
-        SCROLL TO SECTION (OPEN MODAL TOO)
-  ---------------------------------------- */
-  const scrollToSection = (id) => {
-    // ⭐ NEW → Open Booking Modal
-    if (id === "modal") {
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(new CustomEvent("openBookingModal"));
-      }
+  /* ---------------- CLICK HANDLER ---------------- */
+  const handleNavClick = (item) => {
+    if (item.type === "home") {
+      window.location.href = "/"; // hard refresh
+      return;
+    }
+
+    if (item.type === "modal") {
+      window.dispatchEvent(new CustomEvent("openBookingModal"));
       setMenuOpen(false);
       return;
     }
 
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    const offset = el.getBoundingClientRect().top + window.scrollY - 80;
-    smoothScrollTo(offset);
-
-    setMenuOpen(false);
+    if (item.type === "scroll") {
+      const el = document.getElementById(item.id);
+      if (!el) return;
+      const offset = el.getBoundingClientRect().top + window.scrollY - 90;
+      smoothScrollTo(offset);
+      setMenuOpen(false);
+    }
   };
 
-  /* --------------------------------------
-        SCROLLSPY + AUTO HIDE NAV
-  ---------------------------------------- */
+  /* ---------------- SCROLL TRACKING ---------------- */
   useEffect(() => {
-    const handleScroll = () => {
-      const currentY = window.scrollY;
+    if (pathname !== "/") return;
 
-      setScrolled(currentY > 10);
-      setHidden(currentY > lastScrollY.current && currentY > 80);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 10);
+      setHidden(y > lastScrollY.current && y > 80);
+      lastScrollY.current = y;
 
-      lastScrollY.current = currentY;
+      if (y < 300) {
+        setActiveSection("home");
+        return;
+      }
 
-      sections.forEach((section) => {
-        if (section.id === "modal") return; // modal has no scroll section
-
-        const el = document.getElementById(section.id);
+      navItems.forEach((item) => {
+        if (item.type !== "scroll") return;
+        const el = document.getElementById(item.id);
         if (!el) return;
-
         const rect = el.getBoundingClientRect();
         if (rect.top <= 200 && rect.bottom >= 200) {
-          setActiveSection(section.id);
+          setActiveSection(item.id);
         }
       });
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [pathname]);
 
-  /* --------------------------------------
-        ACTIVE HIGHLIGHT SLIDER
-  ---------------------------------------- */
+  /* ---------------- DESKTOP UNDERLINE ---------------- */
   useEffect(() => {
-    const el = navLinkRefs.current[activeSection];
-    const highlight = highlightRef.current;
+    const el =
+      pathname === "/about" || pathname === "/contact"
+        ? navLinkRefs.current[pathname]
+        : navLinkRefs.current[activeSection];
 
-    if (el && highlight) {
-      highlight.style.width = `${el.offsetWidth}px`;
-      highlight.style.left = `${el.offsetLeft}px`;
+    if (el && highlightRef.current) {
+      highlightRef.current.style.width = `${el.offsetWidth}px`;
+      highlightRef.current.style.left = `${el.offsetLeft}px`;
     }
-  }, [activeSection]);
+  }, [activeSection, pathname]);
+
+  /* ---------------- MOBILE ACTIVE CHECK ---------------- */
+  const isMobileActive = (item) => {
+    if (item.type === "route") return pathname === item.id;
+    if (item.type === "home") return pathname === "/" && activeSection === "home";
+    if (item.type === "scroll")
+      return pathname === "/" && activeSection === item.id;
+    return false;
+  };
 
   return (
     <>
-      {/* NAVBAR */}
+      {/* ================= NAVBAR ================= */}
       <nav
-        className={`
-          fixed top-0 left-0 w-full z-50 px-6 py-4 flex items-center justify-between
-          transition-all duration-500
-          ${hidden ? "-translate-y-full" : "translate-y-0"}
-          ${scrolled ? "bg-black/70 backdrop-blur-xl shadow-xl" : "bg-black/30 backdrop-blur-md"}
-        `}
+        className={`fixed top-0 left-0 w-full z-50 px-6 py-4 flex items-center justify-between transition-all duration-500 ${
+          hidden ? "-translate-y-full" : "translate-y-0"
+        } ${
+          scrolled
+            ? "bg-black/80 backdrop-blur-xl shadow-lg"
+            : "bg-black/40 backdrop-blur-md"
+        }`}
       >
         {/* LOGO */}
         <div
-          className="flex items-center gap-3 cursor-pointer"
-          onClick={() => smoothScrollTo(0)}
+          onClick={() => (window.location.href = "/")}
+          className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition"
         >
-          <Image src={logo} alt="Logo" className="h-12 w-auto sm:h-14" />
-          <span className="font-bold text-white text-xl sm:text-2xl">
-            Jatin Travels
-          </span>
+          <Image src={logo} alt="Jatin Travels" className="h-12 w-auto" />
+          <span className="font-bold text-white text-xl">Jatin Travels</span>
         </div>
 
         {/* DESKTOP MENU */}
-        <div className="hidden md:flex items-center gap-10 relative text-white text-lg font-medium">
-
-          {/* ACTIVE SLIDER BAR */}
+        <div className="hidden md:flex items-center gap-8 relative text-sm font-semibold">
           <span
             ref={highlightRef}
-            className="absolute bottom-0 h-[3px] bg-[#FF6A00] rounded-full transition-all duration-300"
-          ></span>
+            className="absolute -bottom-2 h-[3px] bg-[#FF6A00] rounded-full transition-all duration-300"
+          />
 
-          {sections.map((s) => (
-            <button
-              key={s.id}
-              ref={(el) => (navLinkRefs.current[s.id] = el)}
-              onClick={() => scrollToSection(s.id)}
-              className={`nav-hover ${
-                activeSection === s.id ? "text-[#FF6A00]" : "text-white"
-              }`}
-            >
-              {s.label}
-            </button>
-          ))}
+          {navItems.map((item) =>
+            item.type === "modal" ? (
+              <button
+                key={item.label}
+                onClick={() => handleNavClick(item)}
+                className="ml-4 px-5 py-2 rounded-full bg-[#FF6A00] text-black font-bold hover:bg-[#E85B00] transition shadow-md cursor-pointer"
+              >
+                {item.label}
+              </button>
+            ) : item.type === "route" ? (
+              <Link
+                key={item.label}
+                href={item.id}
+                ref={(el) => (navLinkRefs.current[item.id] = el)}
+                className={`cursor-pointer transition ${
+                  pathname === item.id
+                    ? "text-[#FF6A00]"
+                    : "text-white/80 hover:text-[#FF6A00]"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <button
+                key={item.label}
+                ref={(el) => (navLinkRefs.current[item.id] = el)}
+                onClick={() => handleNavClick(item)}
+                className={`cursor-pointer transition ${
+                  activeSection === item.id
+                    ? "text-[#FF6A00]"
+                    : "text-white/80 hover:text-[#FF6A00]"
+                }`}
+              >
+                {item.label}
+              </button>
+            )
+          )}
         </div>
 
-        {/* MOBILE MENU BUTTON */}
+        {/* MOBILE ICON */}
         <button
-          className="md:hidden text-white text-3xl"
+          className="md:hidden text-white text-3xl cursor-pointer hover:text-[#FF6A00] transition"
           onClick={() => setMenuOpen(true)}
         >
           <FiMenu />
         </button>
       </nav>
 
-      {/* MOBILE MENU */}
+      {/* ================= MOBILE MENU ================= */}
       <div
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-all duration-300 ${
+        className={`fixed inset-0 bg-black/70 backdrop-blur-sm z-50 transition-all duration-300 ${
           menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
+        onClick={() => setMenuOpen(false)} // ✅ outside click closes
       >
         <div
-          className={`
-            absolute left-0 top-0 h-full w-[75%] max-w-[320px] bg-[#0F0F17]
-            p-6 text-white transform transition-transform duration-300
-            ${menuOpen ? "translate-x-0" : "-translate-x-full"}
-          `}
+          onClick={(e) => e.stopPropagation()} // ✅ prevent inner close
+          className={`absolute top-0 left-0 h-full w-[80%] max-w-[320px] bg-[#0F0F17] p-6 flex flex-col transform transition-transform duration-300 ${
+            menuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         >
-          <button
-            className="text-3xl mb-6"
-            onClick={() => setMenuOpen(false)}
-          >
-            <FiX />
-          </button>
+          {/* HEADER */}
+          <div className="flex items-center justify-between pb-6 border-b border-white/10">
+            <div className="flex items-center gap-2">
+              <Image src={logo} alt="Jatin Travels" className="h-9 w-auto" />
+              <span className="font-bold">Jatin Travels</span>
+            </div>
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="text-2xl hover:text-[#FF6A00] transition"
+            >
+              <FiX />
+            </button>
+          </div>
 
-          <div className="flex flex-col gap-6 text-lg font-semibold">
-            {sections.map((s) => (
-              <button
-                key={s.id}
-                onClick={() => scrollToSection(s.id)}
-                className="nav-hover"
-              >
-                {s.label}
-              </button>
-            ))}
+          {/* LINKS */}
+          <div className="flex flex-col gap-5 py-6 text-base font-semibold">
+            {navItems.map((item) =>
+              item.type === "modal" ? null : item.type === "route" ? (
+                <Link
+                  key={item.label}
+                  href={item.id}
+                  onClick={() => setMenuOpen(false)}
+                  className={`transition cursor-pointer ${
+                    isMobileActive(item)
+                      ? "text-[#FF6A00]"
+                      : "text-white/80 hover:text-[#FF6A00]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.label}
+                  onClick={() => handleNavClick(item)}
+                  className={`text-left transition cursor-pointer ${
+                    isMobileActive(item)
+                      ? "text-[#FF6A00]"
+                      : "text-white/80 hover:text-[#FF6A00]"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              )
+            )}
+          </div>
+
+          {/* CTA */}
+          <div className="mt-auto pt-6 border-t border-white/10">
+            <button
+              onClick={() => handleNavClick({ type: "modal" })}
+              className="w-full py-3 rounded-xl bg-[#FF6A00] text-black font-bold hover:bg-[#E85B00] transition shadow-lg cursor-pointer"
+            >
+              🚖 Book a Ride
+            </button>
           </div>
         </div>
       </div>
