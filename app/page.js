@@ -11,6 +11,8 @@ import BookingModal from "./components/BookingModal";
 import FloatingButtons from "./components/FloatingButtons";
 import WhyChooseUs from "./components/WhyChooseUs";
 import Pricing from "./components/Pricing";
+import Fleet from "./components/Fleet";
+
 
 
 export default function Home() {
@@ -48,6 +50,7 @@ export default function Home() {
 
       {/* Services passes service name into modal */}
       <Services openBookingModal={openBookingModal} />
+      <Fleet openBookingModal={openBookingModal} />
       <Pricing openBookingModal={openBookingModal} />
       <Reviews />
 
