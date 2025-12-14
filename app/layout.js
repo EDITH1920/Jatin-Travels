@@ -3,6 +3,11 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react"; // ✅ Added analytics
 import Navbar from "./components/Navbar";
 import { PricingModalProvider } from "./components/PricingModalProvider";
+import Breadcrumbs from "./components/Breadcrumbs";
+import BreadcrumbSEO from "./components/BreadcrumbSEO";
+import BottomMobileNav from "./components/BottomMobileNav";
+import LocalBusinessSEO from "./components/LocalBusinessSEO";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,11 +32,15 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar /> {/* <-- Added Nav Section here */}
+        <Breadcrumbs />
+        {/* <LocalBusinessSEO /> */}
+        {/* <BreadcrumbSEO /> */}
         <PricingModalProvider>
           {children}
         </PricingModalProvider>
         {/* ✅ Vercel Analytics must be inside <body> */}
         <Analytics />
+        <BottomMobileNav />
       </body>
     </html>
   );
