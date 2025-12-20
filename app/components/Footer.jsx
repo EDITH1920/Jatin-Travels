@@ -1,132 +1,91 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { FaFacebook, FaInstagram, FaMapMarkerAlt } from "react-icons/fa";
-import { FaGoogle } from "react-icons/fa";
+import Link from "next/link";
+import { FaFacebook, FaInstagram, FaGoogle, FaMapMarkerAlt } from "react-icons/fa";
 import { MdCall, MdEmail } from "react-icons/md";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-const Footer = () => {
+export default function Footer() {
   useEffect(() => {
-    AOS.init({
-      duration: 700,
-      once: false,
-      mirror: true,
-      easing: "ease-out",
-    });
+    AOS.init({ duration: 700, once: true, easing: "ease-out" });
   }, []);
 
   return (
-    <footer className="bg-[#1B1B2F] text-white pt-16 pb-10 px-6 sm:px-10 shadow-[-1px_-4px_10px_rgba(0,0,0,0.4)]">
-      {/* Orange Top Line */}
-      <div className="w-full h-1 bg-linear-to-r from-[#FF6A00] via-[#E85B00] to-[#FF6A00] mb-10 rounded-full"></div>
+    <footer className="bg-[#0F0F17] text-white pt-16 pb-16 px-6 sm:px-10 border-t border-white/10">
+      {/* ORANGE GRADIENT LINE */}
+      <div className="w-full h-1 bg-gradient-to-r from-[#FF6A00] via-[#E85B00] to-[#FF6A00] mb-12 rounded-full"></div>
 
       {/* MAIN GRID */}
-      <div
-        className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12"
-        data-aos="fade-up"
-      >
-        {/* BRAND SECTION */}
+      <div data-aos="fade-up" className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+        
+        {/* BRAND */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-[#FF6A00]">Jatin Travels</h2>
-
-          <p className="text-[#CFCFCF] leading-relaxed text-sm">
-            Safe, comfortable and reliable cab service across Chhattisgarh. We
-            provide premium rides at affordable pricing with 24×7 customer
-            support.
+          <h2 className="text-2xl font-extrabold text-[#FF6A00]">Jatin Travels</h2>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            Reliable cab and taxi services across Chhattisgarh for local,
+            outstation, airport, and tourist travel. Safe, comfortable,
+            and affordable journeys—every time.
           </p>
 
           {/* SOCIAL ICONS */}
-          <div className="flex items-center gap-4 text-2xl mt-4">
-            {/* Facebook */}
-            <a
-              href="https://www.facebook.com/share/1AH641RQnu/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#FF6A00] hover:text-white duration-300"
-            >
+          <div className="flex items-center gap-5 text-xl mt-5">
+            <a href="https://www.facebook.com/share/1AH641RQnu/" target="_blank" rel="noopener noreferrer" className="text-[#FF6A00] hover:text-white transition">
               <FaFacebook />
             </a>
-
-            {/* Instagram */}
-            <a
-              href="https://www.instagram.com/jatintravels.in?igsh=MXB5cW4wM2t3MG1pYQ=="
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#FF6A00] hover:text-white duration-300"
-            >
+            <a href="https://www.instagram.com/jatintravels.in" target="_blank" rel="noopener noreferrer" className="text-[#FF6A00] hover:text-white transition">
               <FaInstagram />
             </a>
-
-            {/* Google Business */}
-            <a
-              href="https://g.co/kgs/YOUR_GOOGLE_BUSINESS_LINK"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#FF6A00] hover:text-white duration-300"
-            >
-              <FaGoogle className="text-[#FF6A00] hover:text-white duration-300 text-xl" />
+            <a href="https://maps.app.goo.gl/vvzrfyLtjnRxCp5m6" target="_blank" rel="noopener noreferrer" className="text-[#FF6A00] hover:text-white transition">
+              <FaGoogle />
             </a>
           </div>
         </div>
 
-        {/* QUICK LINKS */}
+        {/* QUICK LINKS (UPDATED) */}
         <div className="space-y-4">
           <h3 className="text-xl font-semibold text-[#FF6A00]">Quick Links</h3>
-          <ul className="space-y-3 text-[#CFCFCF] text-sm">
-            <li className="hover:text-white duration-200 cursor-pointer">
-              Book a Ride
+          <ul className="space-y-3 text-gray-400 text-sm">
+            <li>
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent("openBookingModal"))}
+                className="hover:text-white transition"
+              >
+                Book a Ride
+              </button>
             </li>
-            <li className="hover:text-white duration-200 cursor-pointer">
-              Our Services
-            </li>
-            <li className="hover:text-white duration-200 cursor-pointer">
-              Pricing
-            </li>
-            <li className="hover:text-white duration-200 cursor-pointer">
-              Terms & Conditions
-            </li>
+            <li><Link href="/pricing-details" className="hover:text-white transition">Pricing</Link></li>
+            <li><Link href="/about" className="hover:text-white transition">About Us</Link></li>
+            <li><Link href="/contact" className="hover:text-white transition">Contact</Link></li>
+            <li><Link href="/privacy-policy" className="hover:text-white transition">Privacy Policy</Link></li>
+            <li><Link href="/terms" className="hover:text-white transition">Terms & Conditions</Link></li>
           </ul>
         </div>
 
-        {/* CONTACT INFO */}
+        {/* CONTACT */}
         <div className="space-y-5">
           <h3 className="text-xl font-semibold text-[#FF6A00]">Contact Us</h3>
 
-          <div className="flex items-start gap-3 text-[#CFCFCF]">
-            <FaMapMarkerAlt className="text-[#FF6A00] text-xl" />
-            <p>Dhodhipara main-road, Korba, Chhattisgarh 495677</p>
+          <div className="flex items-start gap-3 text-gray-400 text-sm">
+            <FaMapMarkerAlt className="text-[#FF6A00] text-lg mt-1" />
+            <p>Dhodhipara Main Road, Korba,<br />Chhattisgarh – 495677</p>
           </div>
 
-          <div className="flex items-start gap-3 text-[#CFCFCF]">
-            <MdCall className="text-[#FF6A00] text-xl" />
-            <a
-              href="tel:+919179053619"
-              className="hover:text-white duration-200"
-            >
-              +91 91790-53619
-            </a>
-          </div>
+          <a href="tel:+919179053619" className="flex items-center gap-3 text-gray-400 hover:text-white transition text-sm">
+            <MdCall className="text-[#FF6A00] text-lg" /> +91 91790 53619
+          </a>
 
-          <div className="flex items-start gap-3 text-[#CFCFCF]">
-            <MdEmail className="text-[#FF6A00] text-xl" />
-            <a
-              href="mailto:jatintravels@gmail.com"
-              className="hover:text-white duration-200"
-            >
-              jatintravels23@gmail.com
-            </a>
-          </div>
+          <a href="mailto:jatintravels24@gmail.com" className="flex items-center gap-3 text-gray-400 hover:text-white transition text-sm">
+            <MdEmail className="text-[#FF6A00] text-lg" /> jatintravels24@gmail.com
+          </a>
         </div>
       </div>
 
-      {/* COPYRIGHT */}
-      <div className="mt-12 text-center text-gray-400 text-sm border-t border-white/10 pt-4">
+      {/* COPYRIGHT ONLY */}
+      <div className="mt-12 text-center text-gray-500 text-sm border-t border-white/10 pt-4">
         © {new Date().getFullYear()} Jatin Travels. All Rights Reserved.
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}
