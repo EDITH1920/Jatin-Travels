@@ -4,32 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { FaSpinner } from "react-icons/fa";
 
-/* -------------------------------------------------------------------
-   STATIC ROUTE DATA (AUTO DISTANCE DETECTION)
-   Add more routes inside here if needed
-------------------------------------------------------------------- */
-const ROUTE_DATA = {
-  "Korba → Bilaspur": { distance: "90 km", estimatedTime: "2 hrs" },
-  "Korba → Raipur": { distance: "200 km", estimatedTime: "4 hrs" },
-  "Korba → Raigarh": { distance: "120 km", estimatedTime: "3 hrs" },
-  "Korba → Champa": { distance: "45 km", estimatedTime: "1 hr" },
-};
-
-/* Popular pickup points */
-const POPULAR_PICKUPS = [
-  "Korba Bus Stand",
-  "Korba Railway Station",
-  "Korba Darri",
-  "Korba Transport Nagar",
-  "Korba Power House",
-];
-
-export default function PricingBookingModal({ isOpen, onClose, selectedPackage }) {
+export default function PricingBookingModal({
+  isOpen,
+  onClose,
+  selectedPackage,
+}) {
   const modalRef = useRef(null);
 
-  // ------------------------------------
+  // --------------------------------------------------
   // STATE
-  // ------------------------------------
+  // --------------------------------------------------
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -38,82 +22,81 @@ export default function PricingBookingModal({ isOpen, onClose, selectedPackage }
     phone: "",
     pickup: "",
     drop: "",
-    tripType: "One Way", // auto-selected
+    vehicle: "",
+    tripType: "One Way",
   });
 
   const [errors, setErrors] = useState({});
-  const [pickupSuggestions, setPickupSuggestions] = useState([]);
 
-  // Prefill route if coming from pricing section
+  // --------------------------------------------------
+  // PREFILL FROM PricingDetails.jsx
+  // --------------------------------------------------
   useEffect(() => {
-    if (selectedPackage) {
-      const title = selectedPackage.title || selectedPackage.route || selectedPackage.place;
-      const isRoute = ROUTE_DATA[title];
+    if (!selectedPackage) return;
 
-      setForm((prev) => ({
-        ...prev,
-        pickup: isRoute ? "Korba" : "",
-        drop: isRoute ? title.split("→")[1].trim() : "",
-        tripType: selectedPackage.roundTrip ? "Round Trip" : "One Way",
+    // Route based (City Routes)
+    if (selectedPackage.route) {
+      const [from, to] = selectedPackage.route.split("→").map(s => s.trim());
+
+      setForm((f) => ({
+        ...f,
+        pickup: from || "",
+        drop: to || "",
+        vehicle: selectedPackage.vehicle || "",
+        tripType: "One Way",
+      }));
+    }
+
+    // Local rides
+    if (selectedPackage.vehicle && !selectedPackage.route) {
+      setForm((f) => ({
+        ...f,
+        vehicle: selectedPackage.vehicle,
       }));
     }
   }, [selectedPackage]);
 
-  // Close modal on outside click
+  // --------------------------------------------------
+  // CLOSE HANDLERS
+  // --------------------------------------------------
   useEffect(() => {
     const handler = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) onClose();
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        onClose();
+      }
     };
     if (isOpen) document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
-  // ESC key close
   useEffect(() => {
     const handler = (e) => e.key === "Escape" && onClose();
     if (isOpen) document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
-  // ------------------------------------
-  // INPUT HANDLERS
-  // ------------------------------------
+  // --------------------------------------------------
+  // INPUT HANDLER
+  // --------------------------------------------------
   const updateField = (e) => {
     const { name, value } = e.target;
 
-    // Phone — digits only
     if (name === "phone") {
       const digits = value.replace(/\D/g, "").slice(0, 10);
       setForm((f) => ({ ...f, phone: digits }));
       return;
     }
 
-    if (name === "pickup") {
-      setForm((f) => ({ ...f, pickup: value }));
-
-      if (value.length < 2) {
-        setPickupSuggestions([]);
-      } else {
-        setPickupSuggestions(
-          POPULAR_PICKUPS.filter((p) =>
-            p.toLowerCase().startsWith(value.toLowerCase())
-          )
-        );
-      }
-      return;
-    }
-
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  // ------------------------------------
+  // --------------------------------------------------
   // VALIDATION
-  // ------------------------------------
+  // --------------------------------------------------
   const validate = () => {
     const err = {};
-
     if (!form.name.trim()) err.name = "Required";
-    if (!/^\d{10}$/.test(form.phone)) err.phone = "Phone must be 10 digits";
+    if (!/^\d{10}$/.test(form.phone)) err.phone = "Enter valid 10 digit number";
     if (!form.pickup.trim()) err.pickup = "Pickup required";
     if (!form.drop.trim()) err.drop = "Drop required";
 
@@ -121,41 +104,33 @@ export default function PricingBookingModal({ isOpen, onClose, selectedPackage }
     return Object.keys(err).length === 0;
   };
 
-  // ------------------------------------
-  // SUBMIT → SEND TO WHATSAPP
-  // ------------------------------------
+  // --------------------------------------------------
+  // SUBMIT → WHATSAPP
+  // --------------------------------------------------
   const submitBooking = () => {
     if (!validate()) return;
 
     setLoading(true);
 
-    const pkgName =
-      selectedPackage.title ||
-      selectedPackage.route ||
-      selectedPackage.place ||
-      "Custom Package";
+    const msg = `🚖 *Jatin Travels – Booking Request*
 
-    const routeInfo = ROUTE_DATA[pkgName];
+📍 *Route*
+${form.pickup} → ${form.drop}
 
-    const distanceText = routeInfo
-      ? `${routeInfo.distance} / ${routeInfo.estimatedTime}`
-      : "N/A";
+🚗 *Vehicle*
+${form.vehicle || "Not specified"}
 
-    const msg = `📌 *Booking Request (Pricing Package)*
+🧾 *Trip Type*
+${form.tripType}
 
-Package: *${pkgName}*
-Trip Type: *${form.tripType}*
+💰 *Price*
+${selectedPackage?.price ? `₹${selectedPackage.price} (One Way)` : "Price will be shared after review"}
 
 👤 *Customer Details*
 Name: ${form.name}
 Phone: ${form.phone}
 
-🚖 *Travel Details*
-Pickup: ${form.pickup}
-Drop: ${form.drop}
-Distance: ${distanceText}
-
-Please confirm availability.`;
+📩 Please confirm availability.`;
 
     const url = `https://wa.me/919179053619?text=${encodeURIComponent(msg)}`;
 
@@ -163,22 +138,22 @@ Please confirm availability.`;
       window.open(url, "_blank");
       setLoading(false);
       setSubmitted(true);
-      setTimeout(() => onClose(), 1200);
-    }, 900);
+      setTimeout(onClose, 1200);
+    }, 800);
   };
 
   if (!isOpen) return null;
 
-  // ---------------------------------------------------------
-  // COMPACT MOBILE UI + CLEAN DESKTOP UI
-  // ---------------------------------------------------------
+  // --------------------------------------------------
+  // UI
+  // --------------------------------------------------
   return (
-    <div className="fixed inset-0 bg-black/60 z-999 flex justify-center items-center px-4">
+    <div className="fixed inset-0 bg-black/60 z-[999] flex justify-center items-center px-4">
       <div
         ref={modalRef}
-        className="bg-[#1B1B2F] w-full max-w-md rounded-2xl p-6 border border-[#FF6A00]/30 shadow-xl animate-modal-fade"
+        className="relative bg-[#1B1B2F] w-full max-w-md rounded-2xl p-6 border border-[#FF6A00]/30 shadow-xl"
       >
-        {/* Close button */}
+        {/* Close */}
         <button
           className="absolute top-3 right-3 text-white text-2xl hover:text-[#FF6A00]"
           onClick={onClose}
@@ -191,7 +166,9 @@ Please confirm availability.`;
         </h2>
 
         {submitted ? (
-          <p className="text-center text-gray-300">Redirecting to WhatsApp…</p>
+          <p className="text-center text-gray-300">
+            Redirecting to WhatsApp…
+          </p>
         ) : (
           <>
             {/* Name */}
@@ -222,22 +199,6 @@ Please confirm availability.`;
               onChange={updateField}
               className={`input-style ${errors.pickup && "border-red-500"}`}
             />
-            {pickupSuggestions.length > 0 && (
-              <div className="bg-[#2A2A35] rounded-lg mt-1 border border-[#FF6A00]/20 overflow-hidden">
-                {pickupSuggestions.map((p, i) => (
-                  <button
-                    key={i}
-                    className="block w-full px-3 py-2 text-left hover:bg-[#FF6A00]/20"
-                    onClick={() => {
-                      setForm((f) => ({ ...f, pickup: p }));
-                      setPickupSuggestions([]);
-                    }}
-                  >
-                    {p}
-                  </button>
-                ))}
-              </div>
-            )}
             {errors.pickup && <p className="err">{errors.pickup}</p>}
 
             {/* Drop */}
@@ -250,21 +211,24 @@ Please confirm availability.`;
             />
             {errors.drop && <p className="err">{errors.drop}</p>}
 
-            {/* Trip Type */}
-            <div className="mt-4">
-              <p className="text-gray-300 text-sm mb-2">Trip Type</p>
-              <div className="flex gap-3">
-                {["One Way", "Round Trip"].map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => setForm((f) => ({ ...f, tripType: t }))}
-                    className={`px-4 py-2 rounded-full border text-sm${form.tripType === t ? "bg-[#FF6A00] text-black border-[#FF6A00]" : "text-[#FF6A00] border-[#FF6A00]/40 hover:bg-[#FF6A00]/20"}`}
-                  >
-                    {t}
-                  </button>
-                ))}
+            {/* Vehicle */}
+            <input
+              name="vehicle"
+              placeholder="Vehicle Type"
+              value={form.vehicle}
+              onChange={updateField}
+              className="input-style"
+            />
+
+            {/* Price display (if available) */}
+            {selectedPackage?.price && (
+              <div className="mt-3 text-sm text-gray-300 bg-[#0F0F17] p-3 rounded-lg border border-[#FF6A00]/20">
+                💰 Estimated Price:{" "}
+                <span className="font-bold text-[#FF6A00]">
+                  ₹{selectedPackage.price} (One Way)
+                </span>
               </div>
-            </div>
+            )}
 
             {/* Submit */}
             <button
@@ -272,7 +236,11 @@ Please confirm availability.`;
               disabled={loading}
               className="w-full mt-5 py-3 rounded-xl font-bold bg-[#FF6A00] hover:bg-[#E85B00] text-black flex justify-center items-center"
             >
-              {loading ? <FaSpinner className="animate-spin" /> : "Confirm Booking"}
+              {loading ? (
+                <FaSpinner className="animate-spin" />
+              ) : (
+                "Confirm Booking"
+              )}
             </button>
           </>
         )}
