@@ -73,7 +73,7 @@ export default function ContactPage() {
           {/* GOOGLE MAP */}
           <div className="w-full h-[380px] rounded-2xl overflow-hidden border border-white/10">
             <iframe
-              src="https://www.google.com/maps?q=Dhodhipara%20Main%20Road%20Korba%20Chhattisgarh&output=embed"
+              src="https://www.google.com/maps?q=22.3720648,82.7167348&z=17&output=embed"
               width="100%"
               height="100%"
               loading="lazy"

@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     <footer className="bg-[#0F0F17] text-white pt-16 pb-16 px-6 sm:px-10 border-t border-white/10">
       {/* ORANGE GRADIENT LINE */}
-      <div className="w-full h-1 bg-gradient-to-r from-[#FF6A00] via-[#E85B00] to-[#FF6A00] mb-12 rounded-full"></div>
+      <div className="w-full h-1 bg-linear-to-r from-[#FF6A00] via-[#E85B00] to-[#FF6A00] mb-12 rounded-full"></div>
 
       {/* MAIN GRID */}
       <div data-aos="fade-up" className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
