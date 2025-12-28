@@ -43,7 +43,7 @@ Please confirm booking.`;
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 z-[999] flex items-center justify-center px-4">
+    <div className="fixed inset-0 bg-black/60 z-999 flex items-center justify-center px-4">
       <div ref={modalRef} className="bg-[#1B1B2F] p-6 rounded-2xl w-full max-w-md border border-[#FF6A00]/30">
         <button onClick={onClose} className="absolute top-3 right-3 text-xl">
           <FiX />

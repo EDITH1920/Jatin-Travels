@@ -134,7 +134,7 @@ export default function Hero() {
 
             <h1
               data-aos="fade-up"
-              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold"
+              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white "
             >
               Book Reliable & Comfortable
               <br />

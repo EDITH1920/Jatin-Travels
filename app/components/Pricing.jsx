@@ -28,7 +28,7 @@ export default function Pricing() {
       terms: [
         "Dzire: ₹1800 (8 Hours / 80 Km)",
         "Ertiga: ₹2200 (8 Hours / 80 Km)",
-        "Innova: ₹2600 (8 Hours / 80 Km)",
+        "Innova: ₹3300 (8 Hours / 80 Km)",
         "Extra hour & extra km charges apply as per vehicle",
         "Night charges applicable after 10 PM",
       ],

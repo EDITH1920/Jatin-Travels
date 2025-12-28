@@ -1,4 +1,3 @@
-"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -8,6 +7,15 @@ import {
   FaShieldAlt,
   FaMapMarkedAlt,
 } from "react-icons/fa";
+
+/* =========================
+   ✅ PAGE-LEVEL SEO (ABOUT)
+   ========================= */
+export const metadata = {
+  title: "About Jatin Travels",
+  description:
+    "Learn about Jatin Travels, a trusted cab service in Korba offering safe, comfortable and reliable taxi services across Chhattisgarh.",
+};
 
 export default function AboutUs() {
   return (
