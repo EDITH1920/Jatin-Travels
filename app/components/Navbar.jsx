@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import logo from "../assets/logo.png";
 import { FiMenu, FiX } from "react-icons/fi";
 
 /* ---------------- NAV CONFIG ---------------- */
@@ -35,6 +34,7 @@ export default function Navbar() {
     const startY = window.scrollY;
     const diff = y - startY;
     let start;
+
     const ease = (t) =>
       t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
@@ -51,7 +51,7 @@ export default function Navbar() {
   /* ---------------- CLICK HANDLER ---------------- */
   const handleNavClick = (item) => {
     if (item.type === "home") {
-      window.location.href = "/"; // hard refresh
+      window.location.href = "/";
       return;
     }
 
@@ -139,7 +139,14 @@ export default function Navbar() {
           onClick={() => (window.location.href = "/")}
           className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition"
         >
-          <Image src={logo} alt="Jatin Travels" className="h-12 w-auto" />
+          <Image
+            src="/images/logo.png"
+            alt="Jatin Travels"
+            width={48}
+            height={48}
+            className="h-12 w-auto"
+            priority
+          />
           <span className="font-bold text-white text-xl">Jatin Travels</span>
         </div>
 
@@ -203,18 +210,23 @@ export default function Navbar() {
         className={`fixed inset-0 bg-black/70 backdrop-blur-sm z-50 transition-all duration-300 ${
           menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
-        onClick={() => setMenuOpen(false)} // ✅ outside click closes
+        onClick={() => setMenuOpen(false)}
       >
         <div
-          onClick={(e) => e.stopPropagation()} // ✅ prevent inner close
+          onClick={(e) => e.stopPropagation()}
           className={`absolute top-0 left-0 h-full w-[80%] max-w-[320px] bg-[#0F0F17] p-6 flex flex-col transform transition-transform duration-300 ${
             menuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          {/* HEADER */}
           <div className="flex items-center justify-between pb-6 border-b border-white/10">
             <div className="flex items-center gap-2">
-              <Image src={logo} alt="Jatin Travels" className="h-9 w-auto" />
+              <Image
+                src="/images/logo.png"
+                alt="Jatin Travels"
+                width={36}
+                height={36}
+                className="h-9 w-auto"
+              />
               <span className="font-bold">Jatin Travels</span>
             </div>
             <button
@@ -225,7 +237,6 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* LINKS */}
           <div className="flex flex-col gap-5 py-6 text-base font-semibold">
             {navItems.map((item) =>
               item.type === "modal" ? null : item.type === "route" ? (
@@ -257,7 +268,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* CTA */}
           <div className="mt-auto pt-6 border-t border-white/10">
             <button
               onClick={() => handleNavClick({ type: "modal" })}

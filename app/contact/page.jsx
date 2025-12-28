@@ -1,6 +1,11 @@
-"use client";
 
 import { FaPhoneAlt, FaWhatsapp, FaMapMarkerAlt } from "react-icons/fa";
+
+export const metadata = {
+  title: "Contact Jatin Travels",
+  description:
+    "Contact Jatin Travels for cab booking in Korba, Raipur and Bilaspur. Call or WhatsApp us for instant taxi service, pricing and availability.",
+};
 
 export default function ContactPage() {
   return (
@@ -38,6 +43,14 @@ export default function ContactPage() {
             >
               <FaPhoneAlt className="text-xl" />
               +91 91790 53619
+            </a>
+
+            <a
+              href="tel:+918120805463"
+              className="flex items-center gap-4 text-gray-300 hover:text-[#FF6A00] transition"
+            >
+              <FaPhoneAlt className="text-xl" />
+              +91 81208 05463
             </a>
 
             <a

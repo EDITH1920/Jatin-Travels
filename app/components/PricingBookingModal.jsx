@@ -148,7 +148,7 @@ Phone: ${form.phone}
   // UI
   // --------------------------------------------------
   return (
-    <div className="fixed inset-0 bg-black/60 z-[999] flex justify-center items-center px-4">
+    <div className="fixed inset-0 bg-black/60 z-999 flex justify-center items-center px-4">
       <div
         ref={modalRef}
         className="relative bg-[#1B1B2F] w-full max-w-md rounded-2xl p-6 border border-[#FF6A00]/30 shadow-xl"
