@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -21,7 +20,6 @@ export default function AboutUs() {
   return (
     <main className="min-h-screen bg-[#0F0F17] text-white px-4 pt-[120px] pb-20">
       <div className="max-w-6xl mx-auto">
-
         {/* HEADER */}
         <div className="text-center mb-16">
           <h1 className="text-4xl sm:text-5xl font-extrabold text-[#FF6A00]">
@@ -41,9 +39,7 @@ export default function AboutUs() {
 
         {/* WHO WE ARE */}
         <section className="mb-20">
-          <h2 className="text-3xl font-bold mb-4 text-[#FF6A00]">
-            Who We Are
-          </h2>
+          <h2 className="text-3xl font-bold mb-4 text-[#FF6A00]">Who We Are</h2>
           <p className="text-gray-300 leading-relaxed text-lg">
             <strong>Jatin Travels</strong> is a customer-focused cab service
             provider offering reliable transportation solutions for daily
@@ -65,8 +61,9 @@ export default function AboutUs() {
                 <Image
                   src="/images/ceo.png"
                   alt="Founder & CEO of Jatin Travels"
-                  fill
-                  className="object-cover"
+                  width={400}
+                  height={500}
+                  className="rounded-xl object-cover"
                   priority
                 />
               </div>
@@ -130,12 +127,8 @@ export default function AboutUs() {
                   <div className="flex justify-center mb-4 text-[#FF6A00]">
                     <Icon size={36} />
                   </div>
-                  <h3 className="text-xl font-bold mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm">
-                    {item.desc}
-                  </p>
+                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                  <p className="text-gray-400 text-sm">{item.desc}</p>
                 </div>
               );
             })}
@@ -171,7 +164,6 @@ export default function AboutUs() {
             Book a Ride
           </Link>
         </section>
-
       </div>
     </main>
   );

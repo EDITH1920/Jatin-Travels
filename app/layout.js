@@ -1,12 +1,13 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
+
 import Navbar from "./components/Navbar";
-import { PricingModalProvider } from "./components/PricingModalProvider";
+import BottomMobileNav from "./components/BottomMobileNav";
 import Breadcrumbs from "./components/Breadcrumbs";
 import BreadcrumbSEO from "./components/BreadcrumbSEO";
-import BottomMobileNav from "./components/BottomMobileNav";
 import LocalBusinessSEO from "./components/LocalBusinessSEO";
+import { PricingModalProvider } from "./components/PricingModalProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,23 +23,27 @@ const geistMono = Geist_Mono({
    ✅ GLOBAL SEO METADATA
    ========================= */
 export const metadata = {
+  metadataBase: new URL("https://jatintravels.in"),
   title: {
     default: "Jatin Travels | Cab Service in Chhattisgarh",
     template: "%s | Jatin Travels",
   },
   description:
-    "Jatin Travels offers reliable cab services in Korba, Raipur, Bilaspur and across Chhattisgarh. Book one-way, round-trip and local cabs via WhatsApp with transparent pricing.",
+    "Jatin Travels provides reliable cab services in Korba, Raipur, Bilaspur and across Chhattisgarh. Book local, outstation and one-way taxis via WhatsApp.",
   keywords: [
     "Jatin Travels",
     "cab service in Korba",
-    "taxi service Korba",
+    "Korba taxi",
     "Korba to Raipur cab",
     "Bilaspur cab booking",
     "Raipur taxi service",
     "one way cab Korba",
-    "cab service Chhattisgarh",
+    "Chhattisgarh cab service",
   ],
-  metadataBase: new URL("https://jatintravels.in"),
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     title: "Jatin Travels – Trusted Cab Service in Chhattisgarh",
     description:
@@ -48,10 +53,6 @@ export const metadata = {
     locale: "en_IN",
     type: "website",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
 };
 
 export default function RootLayout({ children }) {
@@ -60,15 +61,20 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* ================= GLOBAL STRUCTURED DATA ================= */}
+        <LocalBusinessSEO />
+        <BreadcrumbSEO />
+
+        {/* ================= UI ================= */}
         <Navbar />
         <Breadcrumbs />
-        {/* <LocalBusinessSEO /> */}
-        {/* <BreadcrumbSEO /> */}
+
         <PricingModalProvider>
           {children}
         </PricingModalProvider>
-        <Analytics />
+
         <BottomMobileNav />
+        <Analytics />
       </body>
     </html>
   );

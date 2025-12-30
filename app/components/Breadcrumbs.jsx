@@ -6,13 +6,24 @@ import { usePathname } from "next/navigation";
 export default function Breadcrumbs() {
   const pathname = usePathname();
 
+  // Do not show breadcrumbs on home
   if (pathname === "/") return null;
 
   const segments = pathname.split("/").filter(Boolean);
 
+  // Helper to format slug → readable text
+  const formatLabel = (text) =>
+    text
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+
   return (
-    <div className="w-full bg-black/40 backdrop-blur-md border-b border-white/10">
+    <nav
+      aria-label="Breadcrumb"
+      className="w-full bg-black/40 backdrop-blur-md border-b border-white/10"
+    >
       <div className="max-w-6xl mx-auto px-6 py-3 text-sm text-gray-300 flex items-center gap-2">
+        {/* Home */}
         <Link href="/" className="hover:text-[#FF6A00] transition">
           Home
         </Link>
@@ -24,22 +35,23 @@ export default function Breadcrumbs() {
           return (
             <span key={path} className="flex items-center gap-2">
               <span className="opacity-50">›</span>
+
               {isLast ? (
-                <span className="text-[#FF6A00] capitalize">
-                  {seg.replace("-", " ")}
+                <span className="text-[#FF6A00] font-medium">
+                  {formatLabel(seg)}
                 </span>
               ) : (
                 <Link
                   href={path}
-                  className="hover:text-[#FF6A00] transition capitalize"
+                  className="hover:text-[#FF6A00] transition"
                 >
-                  {seg.replace("-", " ")}
+                  {formatLabel(seg)}
                 </Link>
               )}
             </span>
           );
         })}
       </div>
-    </div>
+    </nav>
   );
 }

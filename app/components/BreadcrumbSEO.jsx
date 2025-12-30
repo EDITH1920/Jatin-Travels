@@ -13,14 +13,16 @@ export default function BreadcrumbSEO() {
       "@type": "ListItem",
       position: 1,
       name: "Home",
-      item: "https://jatin-travels.vercel.app/",
+      item: "https://jatintravels.in/",
     },
     ...segments.map((seg, index) => ({
       "@type": "ListItem",
       position: index + 2,
-      name: seg.replace("-", " "),
+      name: seg
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (l) => l.toUpperCase()),
       item:
-        "https://jatin-travels.vercel.app/" +
+        "https://jatintravels.in/" +
         segments.slice(0, index + 1).join("/"),
     })),
   ];

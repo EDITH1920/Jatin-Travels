@@ -25,7 +25,7 @@ export default function PricingClient() {
   const localRides = [
     { vehicle: "Dzire", hours: "8 Hours", km: "80 Km", extraHour: "₹150 / Hour", extraKm: "₹12 / Km", price: "₹1800" },
     { vehicle: "Ertiga", hours: "8 Hours", km: "80 Km", extraHour: "₹200 / Hour", extraKm: "₹14 / Km", price: "₹2200" },
-    { vehicle: "Innova", hours: "8 Hours", km: "80 Km", extraHour: "₹250 / Hour", extraKm: "₹16 / Km", price: "₹2600" },
+    { vehicle: "Innova", hours: "8 Hours", km: "80 Km", extraHour: "₹250 / Hour", extraKm: "₹16 / Km", price: "₹3300" },
   ];
 
   // ---------------------------------------------------------------------------
