@@ -5,9 +5,9 @@ export default function LocalBusinessSEO() {
     "@context": "https://schema.org",
     "@type": "TaxiService",
     "name": "Jatin Travels",
-    "url": "https://jatin-travels.vercel.app",
-    "logo": "https://jatin-travels.vercel.app/logo.png",
-    "image": "https://jatin-travels.vercel.app/logo.png",
+    "url": "https://jatintravels.in",
+    "logo": "https://jatintravels.in/images/logo.png",
+    "image": "https://jatintravels.in/images/logo.png",
     "telephone": "+91-9179053619",
     "priceRange": "₹₹",
     "address": {
